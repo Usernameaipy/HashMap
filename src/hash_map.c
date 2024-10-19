@@ -84,6 +84,56 @@ void insert(HashTable *tables, const char *key, int value) {
   }
 }
 
+void addBacet(HashTable *table, unsigned int newSize) {
+  HashNode **arrVal = calloc(table->valBacets, sizeof(HashNode *));
+  assert(arrVal != NULL);
+  HashNode **realTb = table->table;
+  for (unsigned int i = 0, j = 0; i < table->valBacets; i++) {
+    if (realTb[i] != NULL) {
+      arrVal[j] = realTb[i];
+      ++j;
+    }
+  }
+  free(table->table);
+  unsigned int lastSize = table->valBacets;
+  table->valBacets = newSize;
+  table->table = calloc(table->valBacets, sizeof(HashNode *));
+  assert(table->table != NULL);
+  HashNode **tb = table->table;
+  for (unsigned int i = 0; i < table->valBacets; i++) {
+    tb[i] = NULL;
+  }
+  for (unsigned int i = 0; i < lastSize; i++) {
+    if (arrVal[i] != NULL) {
+      HashNode *node = arrVal[i];
+      unsigned int hash_t = hash(node->key, table->valBacets);
+      tb[hash_t] = arrVal[i];
+    }
+  }
+  free(arrVal);
+}
+
+void rmForHash(HashTable *table, const char *key) {
+  unsigned int hash_t = hash(key, table->valBacets);
+  HashNode **tb = table->table;
+  if (tb[hash_t] != NULL) {
+    HashNode *node = tb[hash_t];
+    free(node->key);
+    free(node->values);
+    free(node);
+  }
+  tb[hash_t] = NULL;
+}
+
+bool checkBacet(HashTable *table, const char *key) {
+  unsigned int hash_t = hash(key, table->valBacets);
+  HashNode **tb = table->table;
+  if (tb[hash_t] != NULL) {
+    return true;
+  }
+  return false;
+}
+
 AnsHash *search(HashTable *table, const char *key) {
   unsigned int hash_t = hash(key, table->valBacets);
   HashNode **arr = table->table;

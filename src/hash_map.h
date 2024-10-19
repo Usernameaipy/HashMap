@@ -1,6 +1,7 @@
 #ifndef HASH_MAP_H
 #define HASH_MAP_H
 #include <assert.h>
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,6 +21,12 @@ HashTable *createTable(int);
 Второй параметр - ключ для значения
 Третий параметр - само значение*/
 void insert(HashTable *, const char *, int);
+/*Дабавляет определённое количество бакетов к уже имеющимся*/
+void addBacet(HashTable *, unsigned int);
+/*Удаляет весь бакет хранящийся по заданному хэшу*/
+void rmForHash(HashTable *, const char *);
+/*Проверяет существует ли бакет по задонному ключу*/
+bool checkBacet(HashTable *, const char *);
 /*Ищет необходимый бакет по ключу
 Возвращает структуру типа AnsHash*/
 AnsHash *search(HashTable *, const char *);
