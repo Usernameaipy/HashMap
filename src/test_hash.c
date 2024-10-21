@@ -77,15 +77,26 @@ START_TEST(insertIsNotTable) {
 }
 END_TEST
 
-// START_TEST(insertIsNotKey){
+START_TEST(insertIsNotKey) {
+  HashTable *table = createTable(10);
+  insert(table, "", 98);
+  insert(table, NULL, 67);
+  insert(table, NULL, 19082);
+  removeHash(table);
+}
+END_TEST
 
-// }
-// END_TEST
-
-// START_TEST(insertIsNotValue){
-
-// }
-// END_TEST
+START_TEST(insertIsNotValue) {
+  HashTable *table = createTable(-78);
+  insert(table, "key1", 0);
+  insert(table, "key6", 0);
+  insert(table, "key8", 0);
+  ck_assert_int_eq(checkBacet(table, "key1"), ERROR);
+  ck_assert_int_eq(checkBacet(table, "key6"), ERROR);
+  ck_assert_int_eq(checkBacet(table, "key8"), ERROR);
+  removeHash(table);
+}
+END_TEST
 
 // START_TEST(insertNullValue){
 
@@ -106,6 +117,8 @@ Suite *HashTableTest(void) {
   // P.S гарантируеться что элементы не равны нулю
   tcase_add_test(tcase, insertNormal);
   tcase_add_test(tcase, insertIsNotTable);
+  tcase_add_test(tcase, insertIsNotKey);
+  tcase_add_test(tcase, insertIsNotValue);
 
   suite_add_tcase(suite, tcase);
 

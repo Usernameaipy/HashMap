@@ -9,6 +9,16 @@ char *strdup(const char *str) {
   return new_str;
 }
 
+void insBacet(int *bacet, unsigned sizeBacet, int value, int *flag) {
+  for (unsigned int i = 0; i < sizeBacet; i++) {
+    if (bacet[i] == 0) {
+      bacet[i] = value;
+      *flag = 1;
+      break;
+    }
+  }
+}
+
 unsigned int hash(const char *str, int valBac) {
   unsigned int hash = 0;
   while (*str) {
@@ -35,6 +45,10 @@ HashTable *createTable(int sizeHash) {
 void insert(HashTable *tables, const char *key, int value) {
   if (!tables)
     return;
+  if (!key || key[0] == '\0')
+    return;
+  if (value = 0)
+    return;
   HashNode **tb = tables->table;
   unsigned int valBacets = tables->valBacets;
   unsigned int position = hash(key, valBacets);
@@ -51,13 +65,7 @@ void insert(HashTable *tables, const char *key, int value) {
     HashNode *node = tb[position];
     int *bacet = node->values;
     unsigned int sizeBacet = node->sizeVal;
-    for (unsigned int i = 0; i < sizeBacet; i++) {
-      if (bacet[i] == 0) {
-        bacet[i] = value;
-        flag = 1;
-        break;
-      }
-    }
+    insBacet(bacet, sizeBacet, value, &flag);
     if (flag != 1) {
       tb[position]->values = realloc(bacet, sizeBacet * 2 * sizeof(int));
       tb[position]->sizeVal = tb[position]->sizeVal * 2;

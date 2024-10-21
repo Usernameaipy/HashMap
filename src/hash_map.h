@@ -27,6 +27,7 @@ struct AnsHash {
   int sizeVal;
 };
 char *strdup(const char *);
+void insBacet(int *, unsigned, int, int *);
 // Хэш функция
 unsigned int hash(const char *, int);
 // Создание таблицы, применять только в первый раз, единственный параметр -
