@@ -10,6 +10,22 @@
 typedef struct HashNode HashNode;
 typedef struct HashTable HashTable;
 typedef struct AnsHash AnsHash;
+struct HashNode {
+  char *key;
+  int *values;
+  int sizeVal;
+  HashNode *next;
+};
+
+struct HashTable {
+  HashNode **table;
+  unsigned int valBacets;
+};
+
+struct AnsHash {
+  int *values;
+  int sizeVal;
+};
 char *strdup(const char *);
 // Хэш функция
 unsigned int hash(const char *, int);
@@ -21,7 +37,7 @@ HashTable *createTable(int);
 Второй параметр - ключ для значения
 Третий параметр - само значение*/
 void insert(HashTable *, const char *, int);
-/*Дабавляет определённое количество бакетов к уже имеющимся*/
+/*Изменяет количество бакетов в Таблице*/
 void addBacet(HashTable *, unsigned int);
 /*Удаляет весь бакет хранящийся по заданному хэшу*/
 void rmForHash(HashTable *, const char *);

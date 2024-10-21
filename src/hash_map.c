@@ -1,22 +1,5 @@
 #include "hash_map.h"
 
-struct HashNode {
-  char *key;
-  int *values;
-  int sizeVal;
-  HashNode *next;
-};
-
-struct HashTable {
-  HashNode **table;
-  unsigned int valBacets;
-};
-
-struct AnsHash {
-  int *values;
-  int sizeVal;
-};
-
 char *strdup(const char *str) {
   unsigned int size = strlen(str);
   char *new_str = malloc(sizeof(char) * size + 1);
@@ -35,18 +18,23 @@ unsigned int hash(const char *str, int valBac) {
 }
 
 HashTable *createTable(int sizeHash) {
-  HashTable *tb = malloc(sizeof(HashTable));
-  assert(tb != NULL);
-  tb->table = malloc(sizeof(HashNode *) * sizeHash);
-  assert(tb->table != NULL);
-  for (int i = 0; i < sizeHash; i++) {
-    tb->table[i] = NULL;
+  HashTable *tb = NULL;
+  if (sizeHash > 0) {
+    tb = malloc(sizeof(HashTable));
+    assert(tb != NULL);
+    tb->table = malloc(sizeof(HashNode *) * sizeHash);
+    assert(tb->table != NULL);
+    for (int i = 0; i < sizeHash; i++) {
+      tb->table[i] = NULL;
+    }
+    tb->valBacets = sizeHash;
   }
-  tb->valBacets = sizeHash;
   return tb;
 }
 
 void insert(HashTable *tables, const char *key, int value) {
+  if (!tables)
+    return;
   HashNode **tb = tables->table;
   unsigned int valBacets = tables->valBacets;
   unsigned int position = hash(key, valBacets);
@@ -120,12 +108,14 @@ void rmForHash(HashTable *table, const char *key) {
     HashNode *node = tb[hash_t];
     free(node->key);
     free(node->values);
-    free(node);
+    free(tb[hash_t]);
   }
   tb[hash_t] = NULL;
 }
 
 bool checkBacet(HashTable *table, const char *key) {
+  if (!table)
+    return false;
   unsigned int hash_t = hash(key, table->valBacets);
   HashNode **tb = table->table;
   if (tb[hash_t] != NULL) {
@@ -135,6 +125,8 @@ bool checkBacet(HashTable *table, const char *key) {
 }
 
 AnsHash *search(HashTable *table, const char *key) {
+  if (!table)
+    return NULL;
   unsigned int hash_t = hash(key, table->valBacets);
   HashNode **arr = table->table;
   AnsHash *result = NULL;
@@ -159,6 +151,8 @@ void printBacet(AnsHash *bacet) {
 }
 
 void removeHash(HashTable *table) {
+  if (!table)
+    return;
   int sizeTable = table->valBacets;
   HashNode **listBacet = table->table;
   for (int i = 0; i < sizeTable; i++) {

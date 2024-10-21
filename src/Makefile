@@ -1,11 +1,12 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -pedantic -std=c11
+CFLAGS = -Wall -Wextra -Werror -pedantic -I -std=c11
+TESTFLAGS = -lcheck -lm -lpthread -lrt -lsubunit -g
 BUILDDIR = ../build/
 
 all : test start
 
 test : hash_map.o test_hash.o
-	$(CC) $(CFLAGS) hash_map.o test_hash.o -o $(BUILDDIR)test
+	$(CC) $(CFLAGS) test_hash.o hash_map.o -o $(BUILDDIR)test $(TESTFLAGS)
 
 hash_map.o : hash_map.c hash_map.h
 	$(CC) $(CFLAGS) -c hash_map.c -o hash_map.o
